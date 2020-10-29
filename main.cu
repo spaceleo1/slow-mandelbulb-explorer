@@ -72,6 +72,10 @@ int main() {
                 case sf::Keyboard::R:
                     camera = Camera(0, 0, -4, 1, 0, 0);
                     break;
+                case sf::Keyboard::N:
+                    printf("why\n");
+                    texture.copyToImage().saveToFile("screenshot.jpg");
+                    break;
                 }
                 break;
             case sf::Event::KeyReleased:
@@ -144,8 +148,6 @@ int main() {
         if (rightPressed) {
             camera.angleY += angleShift;
         }
-
-        printf("x: %f y: %f z: %f angleX: %f angleY: %f\n", camera.pos.x, camera.pos.y, camera.pos.z, camera.angleX, camera.angleY);
 
         update(pixels, figure, camera);
         texture.update(pixels);
