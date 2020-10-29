@@ -2,4 +2,4 @@
 
 This is slow mandelbulb explorer, made using raymarching.
 
-![](https://imgur.com/a/uHj3CXn)
+![image](https://i.imgur.com/uoXBCTT.jpg)
