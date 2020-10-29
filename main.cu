@@ -143,10 +143,10 @@ int main() {
             camera.pos.y += shift;
         }
         if (leftPressed) {
-            camera.angleY -= angleShift;
+            camera.angleY += angleShift;
         }
         if (rightPressed) {
-            camera.angleY += angleShift;
+            camera.angleY -= angleShift;
         }
 
         update(pixels, figure, camera);
