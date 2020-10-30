@@ -18,7 +18,7 @@ __host__ __device__ float Mandelbulb::getDist(const Vec3d& v) {
         float theta = acosf(z.z / r);
         float phi = atan2f(z.y, z.x);
 
-        float zr = powf(r, 8);
+        float zr = powf(r, MANDELBULB_POWER);
         dr = zr / r * MANDELBULB_POWER * dr + 1.0;
 
         theta = theta * MANDELBULB_POWER;

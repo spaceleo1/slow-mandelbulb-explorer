@@ -4,20 +4,18 @@ project(mandelbulb LANGUAGES CXX CUDA)
 set(EXECUTABLE_NAME "mandelbulb")
 
 add_library(main STATIC
-    sphere.cu
-    sphere.h
-    vec3d.cu
-    vec3d.h
-    camera.cu
-    camera.h
-    mandelbulb.cu
-    mandelbulb.h
+    src/sphere.cu
+    src/vec3d.cu
+    src/camera.cu
+    src/mandelbulb.cu
 )
 set_target_properties(main PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
 
 find_package(SFML 2 COMPONENTS graphics REQUIRED)
 
-add_executable(${EXECUTABLE_NAME} main.cu)
+add_executable(${EXECUTABLE_NAME} src/main.cu)
 set_property(TARGET ${EXECUTABLE_NAME} PROPERTY CUDA_SEPARABLE_COMPILATION ON)
 
 target_link_libraries(${EXECUTABLE_NAME} PRIVATE main sfml-graphics)
+
+include_directories(include)
