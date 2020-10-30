@@ -3,7 +3,6 @@
 Mandelbulb::Mandelbulb() {}
 Mandelbulb::~Mandelbulb() {}
 
-
 __host__ __device__ float Mandelbulb::getDist(const Vec3d& v) {
     Vec3d z = v;
     float dr = 1.0;
@@ -51,11 +50,14 @@ __host__ __device__ float4 Mandelbulb::getPixel(int x, int y, const Camera& came
     Vec3d lightPos(0, -1, 0);
     Vec3d dir((float(x) / float(W) * 2.0f - 1.0f) * float(W) / float(H), float(y) / float(H) * 2.0f - 1.0f, camera.f);
 
-    float newX = dir.x * cosf(camera.angleY) - dir.z * sinf(camera.angleY);
-    float newZ = dir.x * sinf(camera.angleY) + dir.z * cosf(camera.angleY);
+    Vec3d tmp(0, 0, 0);
+    tmp.x = dir.x;
+    tmp.y = dir.z * sinf(camera.angleX) + dir.y * cosf(camera.angleX);
+    tmp.z = dir.z * cosf(camera.angleX) - dir.y * sinf(camera.angleX);
 
-    dir.x = newX;
-    dir.z = newZ;
+    dir.x = tmp.x * cosf(camera.angleY) - tmp.z * sinf(camera.angleY);
+    dir.y = tmp.y;
+    dir.z = tmp.x * sinf(camera.angleY) + tmp.z * cosf(camera.angleY);
 
     dir.normalize();
 

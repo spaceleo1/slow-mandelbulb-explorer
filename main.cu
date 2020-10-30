@@ -1,13 +1,22 @@
 #include <SFML/Graphics.hpp>
 
-#include <stdio.h>
-
 #include "global.h"
 #include "cudamain.h"
 #include "vec3d.h"
 #include "camera.h"
 
 #include "mandelbulb.h"
+
+#ifndef NDEBUG
+
+#include <stdio.h>
+#define log(fmt, ...) fprintf(stderr, fmt "\n", __VA_ARGS__)
+
+#else
+
+#define log(fmt, ...)
+
+#endif
 
 sf::Uint8* pixels;
 
@@ -16,7 +25,7 @@ int main() {
 
     init();
 
-    Camera camera(4, 0, 0, 1, 0, acos(-1) / 2.0f);
+    Camera camera(0, 0, -4, 1, 0, 0);
     Mandelbulb figure;
 
     pixels = (sf::Uint8*) malloc(W * H * 4 * sizeof(sf::Uint8));
@@ -32,6 +41,8 @@ int main() {
     bool lShiftPressed = false;
     bool leftPressed = false;
     bool rightPressed = false;
+    bool upPressed = false;
+    bool downPressed = false;
 
     while (window.isOpen()) {
         sf::Event event;
@@ -69,11 +80,16 @@ int main() {
                 case sf::Keyboard::Right:
                     rightPressed = true;
                     break;
+                case sf::Keyboard::Up:
+                    upPressed = true;
+                    break;
+                case sf::Keyboard::Down:
+                    downPressed = true;
+                    break;
                 case sf::Keyboard::R:
                     camera = Camera(0, 0, -4, 1, 0, 0);
                     break;
                 case sf::Keyboard::N:
-                    printf("why\n");
                     texture.copyToImage().saveToFile("screenshot.jpg");
                     break;
                 }
@@ -107,34 +123,28 @@ int main() {
                 case sf::Keyboard::Right:
                     rightPressed = false;
                     break;
+                case sf::Keyboard::Up:
+                    upPressed = false;
+                    break;
+                case sf::Keyboard::Down:
+                    downPressed = false;
+                    break;
                 }
                 break;
             }
         }
 
         if (aPressed) {
-            float shiftX = cosf(camera.angleY) * shift;
-            float shiftZ = sinf(camera.angleY) * shift;
-            camera.pos.x -= shiftX;
-            camera.pos.z -= shiftZ;
+            camera.moveSide(-shift);
         }
         if (dPressed) {
-            float shiftX = cosf(camera.angleY) * shift;
-            float shiftZ = sinf(camera.angleY) * shift;
-            camera.pos.x += shiftX;
-            camera.pos.z += shiftZ;
+            camera.moveSide(shift);
         }
         if (wPressed) {
-            float shiftX = -sinf(camera.angleY) * shift;
-            float shiftZ = cosf(camera.angleY) * shift;
-            camera.pos.x += shiftX;
-            camera.pos.z += shiftZ;
+            camera.moveForward(shift);
         }
         if (sPressed) {
-            float shiftX = -sinf(camera.angleY) * shift;
-            float shiftZ = cosf(camera.angleY) * shift;
-            camera.pos.x -= shiftX;
-            camera.pos.z -= shiftZ;
+            camera.moveForward(-shift);
         }
         if (spacePressed) {
             camera.pos.y -= shift;
@@ -143,11 +153,19 @@ int main() {
             camera.pos.y += shift;
         }
         if (leftPressed) {
-            camera.angleY += angleShift;
+            camera.rotateY(angleShift);
         }
         if (rightPressed) {
-            camera.angleY -= angleShift;
+            camera.rotateY(-angleShift);
         }
+        if (upPressed) {
+            camera.rotateX(-angleShift);
+        }
+        if (downPressed) {
+            camera.rotateX(angleShift);
+        }
+
+        log("x: %f, y: %f, z: %f, angleX: %f, angleY: %f", camera.pos.x, camera.pos.y, camera.pos.z, camera.angleX, camera.angleY);
 
         update(pixels, figure, camera);
         texture.update(pixels);
