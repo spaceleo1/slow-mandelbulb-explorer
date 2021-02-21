@@ -4,7 +4,6 @@ project(mandelbulb LANGUAGES CXX CUDA)
 set(EXECUTABLE_NAME "mandelbulb")
 
 add_library(main STATIC
-    src/sphere.cu
     src/vec3d.cu
     src/camera.cu
     src/mandelbulb.cu
