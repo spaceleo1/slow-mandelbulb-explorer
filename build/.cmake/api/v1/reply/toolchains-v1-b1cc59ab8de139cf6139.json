@@ -1,0 +1,108 @@
+{
+	"kind" : "toolchains",
+	"toolchains" : 
+	[
+		{
+			"compiler" : 
+			{
+				"id" : "NVIDIA",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/usr/include/c++/10.2.0",
+						"/usr/include/c++/10.2.0/x86_64-pc-linux-gnu",
+						"/usr/include/c++/10.2.0/backward",
+						"/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include",
+						"/usr/local/include",
+						"/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed",
+						"/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/opt/cuda/targets/x86_64-linux/lib/stubs",
+						"/opt/cuda/targets/x86_64-linux/lib",
+						"/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0",
+						"/usr/lib",
+						"/lib"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"stdc++",
+						"m",
+						"gcc_s",
+						"gcc",
+						"c",
+						"gcc_s",
+						"gcc"
+					]
+				},
+				"path" : "/opt/cuda/bin/nvcc",
+				"version" : "11.3.58"
+			},
+			"language" : "CUDA",
+			"sourceFileExtensions" : 
+			[
+				"cu"
+			]
+		},
+		{
+			"compiler" : 
+			{
+				"id" : "GNU",
+				"implicit" : 
+				{
+					"includeDirectories" : 
+					[
+						"/usr/include/c++/10.2.0",
+						"/usr/include/c++/10.2.0/x86_64-pc-linux-gnu",
+						"/usr/include/c++/10.2.0/backward",
+						"/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include",
+						"/usr/local/include",
+						"/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0/include-fixed",
+						"/usr/include"
+					],
+					"linkDirectories" : 
+					[
+						"/usr/lib/gcc/x86_64-pc-linux-gnu/10.2.0",
+						"/usr/lib",
+						"/lib"
+					],
+					"linkFrameworkDirectories" : [],
+					"linkLibraries" : 
+					[
+						"stdc++",
+						"m",
+						"gcc_s",
+						"gcc",
+						"c",
+						"gcc_s",
+						"gcc"
+					]
+				},
+				"path" : "/opt/cuda/bin/g++",
+				"version" : "10.2.0"
+			},
+			"language" : "CXX",
+			"sourceFileExtensions" : 
+			[
+				"C",
+				"M",
+				"c++",
+				"cc",
+				"cpp",
+				"cxx",
+				"m",
+				"mm",
+				"mpp",
+				"CPP"
+			]
+		}
+	],
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 0
+	}
+}

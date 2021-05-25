@@ -12,7 +12,7 @@ public:
     Mandelbulb();
     ~Mandelbulb();
 
-    __host__ __device__ float4 getPixel(int x, int y, const Camera& camera);
+    __host__ __device__ float4 getPixel(int x, int y, Camera* camera);
 
     __host__ __device__ float getDist(const Vec3d& v);
     __host__ __device__ Vec3d getNormal(const Vec3d& v, float d);

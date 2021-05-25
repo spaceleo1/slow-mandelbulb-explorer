@@ -16,11 +16,11 @@ void init() {
 }
 
 template<typename T>
-__global__ void kernel(sf::Uint8* d_pixels, int n, T& figure, float camX, float camY, float camZ, float camF, float camAngleX, float camAngleY) {
+__global__ void kernel(sf::Uint8* d_pixels, int n, T& figure, Camera* d_camera) {
     int id = blockIdx.x * blockDim.x + threadIdx.x;
 
     while (id < n) {
-        float4 color = figure.getPixel(id % W, id / W, Camera(camX, camY, camZ, camF, camAngleX, camAngleY));
+        float4 color = figure.getPixel(id % W, id / W, d_camera);
         d_pixels[4 * id] = color.x;
         d_pixels[4 * id + 1] = color.y;
         d_pixels[4 * id + 2] = color.z;
@@ -30,8 +30,8 @@ __global__ void kernel(sf::Uint8* d_pixels, int n, T& figure, float camX, float 
 }
 
 template<typename T>
-void update(sf::Uint8* pixels, T& figure, Camera& camera) {
-    kernel<<<blocks, threads>>>(d_pixels, W * H, figure, camera.pos.x, camera.pos.y, camera.pos.z, camera.f, camera.angleX, camera.angleY);
+void update(sf::Uint8* pixels, T& figure, Camera* d_camera) {
+    kernel<<<blocks, threads>>>(d_pixels, W * H, figure, d_camera);
 
     cudaMemcpy((void**) pixels, d_pixels, W * H * 4 * sizeof(sf::Uint8), cudaMemcpyDeviceToHost);
 }

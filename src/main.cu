@@ -26,6 +26,10 @@ int main() {
     init();
 
     Camera camera(0, 0, -4, 1, 0, 0);
+
+    Camera *d_camera;
+    cudaMalloc((void**) &d_camera, sizeof(Camera));
+
     Mandelbulb figure;
 
     pixels = (sf::Uint8*) malloc(W * H * 4 * sizeof(sf::Uint8));
@@ -135,7 +139,7 @@ int main() {
         }
 
         if (aPressed) {
-            camera.moveSide(-shift);
+            d_camera->moveSide(-shift);
         }
         if (dPressed) {
             camera.moveSide(shift);
@@ -165,9 +169,11 @@ int main() {
             camera.rotateX(angleShift);
         }
 
+        cudaMemcpy(d_camera, &camera, sizeof(Camera), cudaMemcpyHostToDevice);
+
         log("x: %f, y: %f, z: %f, angleX: %f, angleY: %f", camera.pos.x, camera.pos.y, camera.pos.z, camera.angleX, camera.angleY);
 
-        update(pixels, figure, camera);
+        update(pixels, figure, d_camera);
         texture.update(pixels);
 
         window.clear();

@@ -24,7 +24,7 @@ __host__ __device__ float Mandelbulb::getDist(const Vec3d& v) {
         theta = theta * MANDELBULB_POWER;
         phi = phi * MANDELBULB_POWER;
 
-        z = Vec3d(sinf(theta) * cosf(phi), sinf(phi) * sinf(theta), cos(theta)) * zr;
+        z = Vec3d(sinf(theta) * cosf(phi), sinf(phi) * sinf(theta), cosf(theta)) * zr;
         z = z + v;
     }
 
@@ -46,18 +46,18 @@ __host__ __device__ Vec3d Mandelbulb::getNormal(const Vec3d& v, float d) {
     return norm;
 }
 
-__host__ __device__ float4 Mandelbulb::getPixel(int x, int y, const Camera& camera) {
+__host__ __device__ float4 Mandelbulb::getPixel(int x, int y, Camera* camera) {
     Vec3d lightPos(0, -1, 0);
-    Vec3d dir((float(x) / float(W) * 2.0f - 1.0f) * float(W) / float(H), float(y) / float(H) * 2.0f - 1.0f, camera.f);
+    Vec3d dir((float(x) / float(W) * 2.0f - 1.0f) * float(W) / float(H), float(y) / float(H) * 2.0f - 1.0f, camera->f);
 
     Vec3d tmp(0, 0, 0);
     tmp.x = dir.x;
-    tmp.y = dir.z * sinf(camera.angleX) + dir.y * cosf(camera.angleX);
-    tmp.z = dir.z * cosf(camera.angleX) - dir.y * sinf(camera.angleX);
+    tmp.y = dir.z * sinf(camera->angleX) + dir.y * cosf(camera->angleX);
+    tmp.z = dir.z * cosf(camera->angleX) - dir.y * sinf(camera->angleX);
 
-    dir.x = tmp.x * cosf(camera.angleY) - tmp.z * sinf(camera.angleY);
+    dir.x = tmp.x * cosf(camera->angleY) - tmp.z * sinf(camera->angleY);
     dir.y = tmp.y;
-    dir.z = tmp.x * sinf(camera.angleY) + tmp.z * cosf(camera.angleY);
+    dir.z = tmp.x * sinf(camera->angleY) + tmp.z * cosf(camera->angleY);
 
     dir.normalize();
 
@@ -65,7 +65,7 @@ __host__ __device__ float4 Mandelbulb::getPixel(int x, int y, const Camera& came
     
     int it = 0;
     for (; it < MAX_RAYMARCH_ITERS; ++it) {
-        Vec3d p = camera.pos + dir * t;
+        Vec3d p = camera->pos + dir * t;
         float d = getDist(p);
 
         if (d < 0.001) {
